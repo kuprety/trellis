@@ -2,7 +2,7 @@
 /* Page hero (same block as the other pages; consider moving to style.css) */
 .nav-links a[aria-current="page"] { color: var(--green); }
 .page-hero { max-width: var(--max); margin: 0 auto; padding: 48px var(--pad) 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
-.page-hero h1 { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 500; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.02em; color: var(--green); }
+.page-hero h1 { display: flex; flex-direction: column; align-items: center; gap: 12px; font-weight: 500; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.02em; color: var(--green); }
 .page-hero h1 .serif { font-size: clamp(28px, 3.6vw, 52px); letter-spacing: -.02em; color: var(--text); }
 
 :root { --pink: #fde0f0; }
