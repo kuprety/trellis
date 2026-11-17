@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>You’re booked · Trellis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="book.css">
+  <link rel="stylesheet" href="book-confirmed.css">
+</head>
+<body>
+<header class="book-top"><a class="logo" href="dashboard.html"><img src="images/logo.svg" alt="" width="24" height="24">Trellis</a></header>
+
+<main class="book">
+  <h1>You’re booked!</h1>
+
+  <ol class="stepper" aria-label="Booking steps">
+    <li class="done"><span>Completed</span><b><i class="ico"></i>Choose a time</b></li>
+    <li class="done"><span>Completed</span><b><i class="ico"></i>Add a note</b></li>
+    <li class="done" aria-current="step"><span>Confirmed</span><b><i class="ico"></i>Confirmation</b></li>
+  </ol>
+
+
+
+  <section class="confirm" aria-labelledby="see-you">
+    <svg class="big-check" viewBox="0 0 80 80" width="80" height="80" aria-hidden="true"><circle cx="40" cy="40" r="40" fill="currentColor"/><path d="M24 41l11 11 22-24" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+    <h2 id="see-you"></h2>
+    <p class="confirm-sub" id="sub"></p>
+
+    <article class="ticket" id="ticket"></article>
+
+    <div class="confirm-actions">
+      <button class="btn btn-primary" id="cal" type="button">Add to calendar</button>
+      <a class="btn btn-outline" href="dashboard.html">Go to dashboard</a>
+    </div>
+    <p class="confirm-links"><a id="resched" href="book.html">Reschedule</a><button type="button" id="cancel">Cancel booking</button></p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const bk = currentBooking(), m = mentorBySlug(bk.mentor), info = bookingInfo(bk);
+  document.querySelectorAll('.ico').forEach(e => e.innerHTML = ICON.checkFilled(26));
+  $('see-you').textContent = 'See you on ' + info.dow;
+  $('sub').innerHTML = `Your conversation with ${m.first} is confirmed.<br>The details and meeting link are in your email.`;
+  $('resched').href = 'book.html?mentor=' + m.slug;
+
+  const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } };
+  const shared = [bk.note && `Note: “${esc(bk.note.length > 90 ? bk.note.slice(0, 90) + '…' : bk.note)}”`, bk.file && esc(bk.file), bk.link && esc(host(bk.link))].filter(Boolean);
+  $('ticket').innerHTML = `<div class="when"><span>${info.dow.slice(0, 3)}</span><strong>${info.day}</strong><span>Nov</span></div>
+    <div class="what">
+      <div class="who"><img class="ring" src="images/mentor-${m.slug}.svg" alt=""><div><h3>${m.name}</h3><p>${m.role}</p><p class="small2">${m.co} · ${m.years} years’ experience</p></div></div>
+      <p class="time">${info.long2026}</p>
+      <p class="range">${info.range} · Eastern Time</p>
+      <p class="meta"><span>30 minutes</span><span>Video call</span><span>Free</span></p>
+      ${shared.length ? `<div class="shared"><p class="small">Shared with ${m.first}</p><ul>${shared.map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
+    </div>`;
+
+  // Add to calendar: downloads a real .ics file (Eastern Time)
+  $('cal').onclick = () => {
+    const p = n => String(n).padStart(2, '0'), d = `2026-11-${p(info.day)}`.replace(/-/g, '');
+    const t = ([h, mi]) => p(h) + p(mi) + '00';
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Trellis//Prototype//EN', 'BEGIN:VEVENT', `UID:${Date.now()}@trellis`,
+      `DTSTAMP:${new Date().toISOString().replace(/[-:]|\.\d+/g, '')}`,
+      `DTSTART;TZID=America/New_York:${d}T${t(info.start)}`, `DTEND;TZID=America/New_York:${d}T${t(info.end)}`,
+      `SUMMARY:Trellis conversation with ${m.name}`, 'DESCRIPTION:30-minute video call', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+    a.download = 'trellis-conversation.ics'; a.click();
+  };
+  $('cancel').onclick = () => { if (confirm('Cancel this booking?')) { store.set('booking', null); location.href = 'dashboard.html'; } };
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create your account · Trellis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="index.html"><img src="images/logo.svg" alt="" width="24" height="24">Trellis</a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="how-it-works.html">How it works</a>
+    <a href="stories.html">Stories</a>
+    <a href="resources.html">Resources</a>
+    <a href="faq.html">FAQ</a>
+  </nav>
+  <div class="nav-actions">
+    <a href="#login">Log in</a>
+    <a class="btn btn-sm btn-primary" href="signup.html">Get started</a>
+  </div>
+</header>
+
+<main class="signup">
+  <section class="signup-intro">
+    <span class="chip">Get started</span>
+    <h1>Your next chapter starts here</h1>
+    <p class="lede-left">Meet with a parent who understands the doubts and possibility of starting again.</p>
+    <ul class="checks">
+      <li>A few questions about your story</li>
+      <li>Mentors who have been where you are</li>
+      <li>A space to take your next step</li>
+    </ul>
+  </section>
+
+  <form class="signup-form" id="signup-form" novalidate>
+    <h2>Create your account</h2>
+    <label for="first">First name</label>
+    <input id="first" name="first" type="text" placeholder="Your first name" autocomplete="given-name">
+    <label for="email">Email address</label>
+    <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+    <label for="pw">Password</label>
+    <input id="pw" name="pw" type="password" placeholder="Choose a password" autocomplete="new-password">
+    <button class="btn btn-primary btn-block" type="submit">Create account <span aria-hidden="true">→</span></button>
+    <p class="alt">Already have an account? <a href="#login">Log in</a></p>
+  </form>
+</main>
+
+<script>
+  // Prototype only: nothing is sent anywhere. Saves the name so the dashboard can say "Welcome, <name>".
+  document.getElementById('signup-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('first').value.trim() || 'Ashlynn';
+    try { localStorage.setItem('trellis:name', JSON.stringify(name)); } catch (err) {}
+    location.href = 'onboarding.html';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <title>Home · Trellis</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<header class="app-nav" id="app-nav"></header>
+
+<main class="dash" id="top">
+  <section class="dash-hero">
+    <h1>Welcome, <span id="name">Ashlynn</span></h1>
+    <p class="serif sub">Your matches are ready</p>
+    <p class="intro">Based on your answers, here are three parents who returned to work after a career break, just like you.</p>
+    <div class="matched">
+      <span>Matched on</span>
+      <span class="pill" id="p-field"></span><span class="pill" id="p-gap"></span><span class="pill" id="p-help"></span>
+      <a class="edit" id="edit" href="onboarding.html?edit=1"></a>
+    </div>
+  </section>
+
+  <div class="dash-grid" id="dash-grid">
+    <section aria-labelledby="matches-h">
+      <div class="list-head"><h2 id="matches-h">Your top matches</h2><a class="link-arrow" id="see-all" href="find-mentor.html">See all mentors </a></div>
+      <div class="mlist" id="mlist"></div>
+    </section>
+
+    <aside class="side">
+      <section class="preview" id="preview" aria-live="polite" hidden></section>
+      <section class="panel">
+        <h2>Your next steps</h2>
+        <ol class="steps-list">
+          <li class="done"><span class="dot" id="d1"></span>Create your account</li>
+          <li class="done"><span class="dot" id="d2"></span>Tell us your story</li>
+          <li class="current"><span class="dot">3</span>Book your first conversation</li>
+          <li><span class="dot">4</span>Meet your mentor</li>
+        </ol>
+      </section>
+      <section class="panel" id="sessions">
+        <h2 class="with-icon" id="cal-h"></h2>
+        <p>Nothing booked yet. Your first conversation will show up here.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <a class="logo logo-lg" href="#top"><img src="images/logo.svg" alt="" width="40" height="40">Trellis</a>
+    <p>Mentorship for parents returning to work, woven together with parents who already made the leap.</p>
+  </div>
+
+
+</footer>
+
+<script src="app.js"></script>
+<script>
+  mountNav('home');
+  document.getElementById('name').textContent = store.get('name', 'Ashlynn');
+  const a = store.get('answers', {});
+  const gapLabel = { 'Under 2 years': 'Under 2 year break', '2 - 5 years': '2 - 5 year break', '5 - 10 years': '5 - 10 year break', '10+ years': '10+ year break', 'I haven’t taken a break': 'No career break' };
+  document.getElementById('p-field').textContent = a.field || 'Marketing & Creative';
+  document.getElementById('p-gap').textContent = gapLabel[a.gap] || '2 - 5 year break';
+  document.getElementById('p-help').textContent = a.help || 'Updating resumé';
+  document.getElementById('edit').innerHTML = ICON.pencil(20) + 'Edit answers';
+  document.getElementById('see-all').insertAdjacentHTML('beforeend', ICON.arrow(20));
+  document.getElementById('cal-h').innerHTML = ICON.cal(26) + 'Upcoming sessions';
+  ['d1', 'd2'].forEach(id => document.getElementById(id).innerHTML = ICON.check(16));
+  const list = document.getElementById('mlist'), prev = document.getElementById('preview');
+  const top3 = MENTORS.slice(0, 3);
+  let current = null;
+
+  function renderList() {
+    list.innerHTML = top3.map((m, n) => mentorCard(m, { best: n === 0, selected: m.slug === current })).join('');
+  }
+  function renderPreview() {
+    document.getElementById('dash-grid').classList.toggle('has-preview', !!current);
+    if (!current) { prev.hidden = true; prev.innerHTML = ''; return; }
+    const m = mentorBySlug(current);
+    prev.innerHTML = `<button class="prev-close" type="button" aria-label="Close profile">×</button>
+      <img src="images/mentor-${m.slug}.svg" alt="${m.name}">
+      <h2>${m.name}</h2><p class="prev-role">${m.role} · ${m.co}</p>
+      <blockquote>${m.quote}</blockquote>
+      <a class="btn btn-primary btn-full" href="book.html?mentor=${m.slug}">Book a Conversation</a>
+      <a class="btn btn-line btn-full" href="book.html?mentor=${m.slug}">View Full Schedule</a>`
+      ;
+    prev.hidden = false;
+  }
+  function select(slug, refocus) {
+    current = slug; renderList(); renderPreview();
+    if (refocus) list.querySelector('.mcard.is-selected')?.focus();
+    // On narrow screens the panel sits below the list, so bring it into view
+    if (slug && window.matchMedia('(max-width: 1000px)').matches) prev.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  list.addEventListener('click', e => {
+    const view = e.target.closest('[data-view]');
+    if (view) { e.preventDefault(); select(view.dataset.view); return; }
+    const card = e.target.closest('.mcard');
+    if (card && !e.target.closest('a')) select(card.dataset.slug);
+  });
+  list.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('mcard')) { e.preventDefault(); select(e.target.dataset.slug, true); }
+  });
+  prev.addEventListener('click', e => { if (e.target.closest('.prev-close')) select(null, false); });
+  renderList();
+</script>
+</body>
+</html>

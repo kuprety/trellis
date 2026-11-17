@@ -1,0 +1,32 @@
+/* Book a conversation, step 3 (confirmation). Builds on style.css + app.css + book.css. */
+.confirm { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 64px; }
+.big-check { color: var(--green); }
+.big-check path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .5s .2s ease-out forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.confirm h2 { margin-top: 24px; font-size: clamp(32px, 3.6vw, 48px); font-weight: 500; letter-spacing: -.02em; color: var(--green); }
+.confirm-sub { margin-top: 14px; font-size: 20px; }
+
+.ticket { display: grid; grid-template-columns: 150px 1fr; width: min(100%, 760px); margin-top: 44px; overflow: hidden; text-align: left; border-radius: 28px; background: #fff; box-shadow: 0 0 0 2px var(--line); }
+.when { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 28px 12px; background: var(--lavender); color: var(--green); font-size: 18px; }
+.when strong { font-size: 56px; font-weight: 500; line-height: 1; letter-spacing: -.02em; }
+.what { padding: 32px 36px; }
+.who { display: flex; align-items: center; gap: 16px; }
+.who h3 { font-size: 22px; font-weight: 500; color: var(--text-strong); }
+.who p { font-size: 16px; }
+.time { margin-top: 26px; font-size: 26px; font-weight: 500; color: var(--text-strong); }
+.range { margin-top: 4px; font-size: 20px; }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.meta span { padding: 6px 14px; border-radius: var(--radius-pill); background: var(--mint); color: var(--green); font-size: 15px; }
+.shared { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+.shared .small { font-size: 15px; }
+.shared ul { margin: 8px 0 0; padding-left: 20px; font-size: 16px; }
+
+.confirm-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 36px; }
+.confirm-actions .btn { padding: 18px 36px; font-size: 18px; cursor: pointer; }
+.confirm-links { display: flex; gap: 28px; margin-top: 24px; font-size: 17px; }
+.confirm-links a { color: var(--green); font-weight: 600; }
+.confirm-links button { border: 0; background: none; padding: 0; font: inherit; color: var(--muted); cursor: pointer; }
+.confirm-links a:hover, .confirm-links button:hover { text-decoration: underline; }
+
+@media (max-width: 640px) { .ticket { grid-template-columns: 1fr; } .when { flex-direction: row; gap: 10px; padding: 16px; } .when strong { font-size: 32px; } .what { padding: 24px; } }
+@media (prefers-reduced-motion: reduce) { .big-check path { animation: none; stroke-dashoffset: 0; } }

@@ -1,0 +1,24 @@
+/* Onboarding questions. Builds on style.css + app.css. */
+.ob-top { padding: 28px var(--pad); }
+.ob { max-width: 1000px; margin: 0 auto; padding: 24px var(--pad) 64px; }
+.ob-label { text-align: center; font-size: 16px; color: var(--text-strong); margin-bottom: 20px; }
+.progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.progress span { height: 5px; border-radius: 3px; background: #e6e8eb; transition: background .25s; }
+.progress span.on { background: var(--green); }
+.ob h1 { margin: 64px 0 56px; font-size: clamp(30px, 3.4vw, 46px); font-weight: 500; letter-spacing: -.02em; line-height: 1.15; color: var(--green); }
+
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-content: start; min-height: 300px; }
+.opts.one { grid-template-columns: 1fr; }
+.opt { position: relative; display: flex; align-items: center; gap: 18px; padding: 0 32px; min-height: 86px; border: 1.5px solid #e6e8eb; border-radius: 28px; background: #fff; font-size: 20px; color: var(--text-strong); cursor: pointer; transition: border-color .15s, color .15s; }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt-icon { color: var(--green); display: grid; }
+.opt-text { flex: 1; }
+.radio { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #e1e3e6; flex: none; }
+.opt:hover { border-color: var(--green-light); }
+.opt:has(input:checked) { border-color: var(--green); color: var(--green); }
+.opt:has(input:checked) .radio { border-color: var(--green); background: radial-gradient(circle, var(--green) 0 8px, transparent 9px); }
+.opt:has(input:focus-visible) { outline: 3px solid var(--green-light); outline-offset: 2px; }
+
+.btn-continue { width: 100%; justify-content: center; margin-top: 32px; padding-block: 24px; font-size: 22px; border-radius: 999px; cursor: pointer; }
+@media (max-width: 640px) { .opts { grid-template-columns: 1fr; } .ob h1 { margin: 40px 0 32px; } }
+@media (prefers-reduced-motion: reduce) { .progress span, .opt { transition: none; } }

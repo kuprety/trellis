@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Let’s match a mentor · Trellis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+<header class="ob-top"><a class="logo" href="index.html"><img src="images/logo.svg" alt="" width="24" height="24">Trellis</a></header>
+
+<main class="ob">
+  <p class="ob-label">Let’s match a mentor for you</p>
+  <div class="progress" id="progress" role="progressbar" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1" aria-label="Question progress">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <form id="ob-form">
+    <h1 id="q"></h1>
+    <div class="opts" id="opts" role="radiogroup" aria-labelledby="q"></div>
+    <button class="btn btn-primary btn-continue" id="continue" type="submit" disabled>Continue</button>
+  </form>
+</main>
+
+<script src="app.js"></script>
+<script>
+  // Step 5 wasn't in the Figma export. This one is a placeholder: edit the question/options.
+  const STEPS = [
+    { key: 'reason', q: 'What brings you to Trellis?', one: true, opts: [['I’m returning to work', 'sprout'], ['I’d like to mentor', 'people']] },
+    { key: 'field', q: 'Which field feels like your next chapter?', opts: ['Technology & Engineering', 'Marketing & Creative', 'Finance & Business', 'Education', 'Healthcare', 'Still exploring'] },
+    { key: 'gap', q: 'How long was your career break?', opts: ['Under 2 years', '2 - 5 years', '5 - 10 years', '10+ years', 'I haven’t taken a break'] },
+    { key: 'stage', q: 'How far along are you right now?', opts: ['Just exploring', 'Preparing materials', 'Actively applying', 'Interviewing', 'Have an offer/negotiating', 'Not sure'] },
+    { key: 'help', q: 'What would help most right now?', opts: ['Updating resumé', 'Interview practice', 'Portfolio feedback', 'Rebuilding confidence', 'Networking', 'Not sure yet'] },
+    { key: 'when', q: 'When are you hoping to return?', opts: ['As soon as possible', 'In the next 3 months', 'In 3-6 months', 'Just exploring for now'] }
+  ];
+  const editing = new URLSearchParams(location.search).has('edit');
+  const answers = editing ? store.get('answers', {}) : {};
+  let i = 0;
+  const $ = id => document.getElementById(id);
+
+  function render() {
+    const s = STEPS[i];
+    $('q').textContent = s.q;
+    $('opts').className = 'opts' + (s.one ? ' one' : '');
+    $('opts').innerHTML = s.opts.map(o => {
+      const [label, icon] = Array.isArray(o) ? o : [o];
+      return `<label class="opt"><input type="radio" name="${s.key}" value="${esc(label)}"${answers[s.key] === label ? ' checked' : ''}>
+        ${icon ? `<span class="opt-icon">${ICON[icon](28)}</span>` : ''}<span class="opt-text">${esc(label)}</span><span class="radio" aria-hidden="true"></span></label>`;
+    }).join('');
+    document.querySelectorAll('#progress span').forEach((el, n) => el.classList.toggle('on', n <= i));
+    $('progress').setAttribute('aria-valuenow', i + 1);
+    $('continue').disabled = !answers[s.key];
+    $('continue').textContent = 'Continue';
+  }
+
+  $('opts').addEventListener('change', e => { answers[STEPS[i].key] = e.target.value; $('continue').disabled = false; });
+  $('ob-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!answers[STEPS[i].key]) return;
+    if (i < STEPS.length - 1) { i++; render(); window.scrollTo(0, 0); }
+    else { store.set('answers', answers); location.href = 'dashboard.html'; }
+  });
+  render();
+</script>
+</body>
+</html>

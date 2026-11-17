@@ -1,0 +1,27 @@
+/* Resources page. Builds on style.css. */
+/* Page hero (same block as the other pages; consider moving to style.css) */
+.nav-links a[aria-current="page"] { color: var(--green); }
+.page-hero { max-width: var(--max); margin: 0 auto; padding: 48px var(--pad) 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.page-hero h1 { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 500; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.02em; color: var(--green); }
+.page-hero h1 .serif { font-size: clamp(28px, 3.6vw, 52px); letter-spacing: -.02em; color: var(--text); }
+
+:root { --pink: #fde0f0; }
+
+.resource-grid { max-width: var(--max); margin: 72px auto 0; padding: 0 var(--pad); display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.resource { display: flex; flex-direction: column; min-height: 290px; padding: 32px 36px; border-radius: 44px; color: var(--text-strong); transition: transform .2s; }
+.resource:hover { transform: translateY(-3px); }
+.res-type { font-size: 16px; letter-spacing: .02em; text-transform: uppercase; color: var(--green); }
+.resource h3 { margin-top: 28px; font-size: 28px; font-weight: 500; line-height: 1.25; letter-spacing: -.01em; max-width: 14em; }
+.res-meta { margin-top: auto; padding-top: 24px; font-size: 18px; color: #7b8087; }
+.res-lavender { background: var(--lavender); }
+.res-mint { background: var(--mint); }
+.res-yellow { background: var(--yellow); }
+.res-pink { background: var(--pink); }
+
+.resources-contact { margin: 64px 0 0; text-align: center; font-size: 22px; color: #7b8087; }
+.resources-contact a { color: var(--green); font-weight: 600; }
+.resources-contact a:hover { text-decoration: underline; }
+
+@media (max-width: 1000px) { .resource-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .resource-grid { grid-template-columns: 1fr; } .resource { min-height: 240px; } }
+@media (prefers-reduced-motion: reduce) { .resource { transition: none; } .resource:hover { transform: none; } }

@@ -1,0 +1,39 @@
+/* Stories page. Builds on style.css (tokens, nav, .btn, .chip, footer). */
+
+.nav-links a[aria-current="page"] { color: var(--green); }
+
+/* ---------- Page hero (same pattern as how-it-works) ---------- */
+.page-hero { max-width: var(--max); margin: 0 auto; padding: 48px var(--pad) 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.page-hero h1 { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 500; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.02em; color: var(--green); }
+.page-hero h1 .serif { font-size: clamp(28px, 3.6vw, 52px); letter-spacing: -.02em; color: var(--text); }
+
+/* ---------- Filters ---------- */
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 56px auto 0; padding: 0 var(--pad); }
+.filter { font: inherit; font-size: 18px; padding: 10px 24px; border: 0; border-radius: var(--radius-pill); background: #f0efec; color: var(--text); cursor: pointer; transition: background .2s, color .2s; }
+.filter:hover { background: #e6e4df; }
+.filter[aria-pressed="true"] { background: var(--green); color: #fff; }
+.filter:focus-visible { outline: 3px solid var(--green-light); outline-offset: 3px; }
+
+/* ---------- Story cards ---------- */
+.stories-grid { max-width: var(--max); margin: 56px auto 0; padding: 0 var(--pad); display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.story { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; min-height: 290px; padding: 30px; border: 2px solid #e8e6e1; border-radius: var(--radius-card); background: var(--bg); }
+.story[hidden] { display: none; }
+.story-head { display: flex; align-items: center; gap: 20px; }
+.story-head h3 { font-size: 22px; font-weight: 500; color: var(--green); line-height: 1.3; }
+.story-head p { font-size: 18px; color: var(--text); }
+.avatar { width: 80px; height: 80px; flex: none; border-radius: 50%; object-fit: cover; border: 3px solid; }
+.ring-lavender { border-color: #c9b8f0; }
+.ring-green { border-color: var(--green-light); }
+.story blockquote { margin: 0; font-size: 26px; line-height: 1.3; color: var(--text); letter-spacing: -.01em; }
+.tags { display: flex; gap: 12px; flex-wrap: wrap; }
+.tag { padding: 4px 12px; border-radius: var(--radius-pill); font-size: 14px; }
+.tag-gap { background: var(--lavender); color: var(--text-strong); }
+.tag-field { background: var(--mint); color: var(--green); }
+
+/* ---------- CTA ---------- */
+.stories-cta { display: flex; justify-content: center; margin: 80px auto 0; padding: 0 var(--pad); }
+.btn-wide { width: min(100%, 400px); justify-content: center; padding-block: 20px; }
+
+@media (max-width: 1000px) { .stories-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .stories-grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .filter { transition: none; } }

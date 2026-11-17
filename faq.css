@@ -1,0 +1,35 @@
+/* FAQ page. Builds on style.css. */
+/* Page hero (same block as the other pages; consider moving to style.css) */
+.nav-links a[aria-current="page"] { color: var(--green); }
+.page-hero { max-width: var(--max); margin: 0 auto; padding: 48px var(--pad) 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.page-hero h1 { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 500; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.02em; color: var(--green); }
+.page-hero h1 .serif { font-size: clamp(28px, 3.6vw, 52px); letter-spacing: -.02em; color: var(--text); }
+
+.faq-list { max-width: var(--max); margin: 72px auto 0; padding: 0 var(--pad); display: flex; flex-direction: column; gap: 20px; }
+
+.faq-item { border: 2px solid #e6e3dc; border-radius: 56px; background: var(--bg); transition: background .2s; }
+.faq-item[open] { background: var(--mint); }
+
+.faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 40px 56px; font-size: 26px; font-weight: 500; color: var(--text-strong); cursor: pointer; list-style: none; border-radius: 56px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:focus-visible { outline: 3px solid var(--green-light); outline-offset: 2px; }
+.faq-item[open] summary { padding-bottom: 20px; }
+
+/* Plus icon that rotates into an X when open */
+.faq-item summary::after { content: ""; flex: none; width: 24px; height: 24px; background:
+  linear-gradient(var(--green), var(--green)) center / 100% 3px no-repeat,
+  linear-gradient(var(--green), var(--green)) center / 3px 100% no-repeat;
+  transition: transform .2s; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+
+.faq-item p { padding: 0 56px 40px; max-width: 70ch; font-size: 22px; color: var(--text); }
+
+.faq-cta { display: flex; justify-content: center; margin-top: 64px; padding: 0 var(--pad); }
+
+@media (max-width: 640px) {
+  .faq-item, .faq-item summary { border-radius: 32px; }
+  .faq-item summary { padding: 28px 24px; font-size: 20px; }
+  .faq-item[open] summary { padding-bottom: 12px; }
+  .faq-item p { padding: 0 24px 28px; font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { .faq-item, .faq-item summary::after { transition: none; } }

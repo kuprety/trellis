@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <title>Find a mentor · Trellis</title>
+  <link rel="stylesheet" href="find-mentor.css">
+</head>
+<body>
+<header class="app-nav" id="app-nav"></header>
+
+<main class="find" id="top">
+  <h1>Find your mentor</h1>
+  <p class="find-sub">Practical support for your resumé, portfolio and next interview.</p>
+
+  <div class="filters-row">
+    <label class="sel"><span>Industry</span><select><option>Design &amp; creative</option><option>Technology &amp; Engineering</option><option>Marketing &amp; Creative</option><option>Finance &amp; Business</option><option>Education</option><option>Healthcare</option></select></label>
+    <label class="sel"><span>Support with</span><select><option>CV &amp; portfolio review</option><option>Interview preparation</option><option>Networking</option><option>Rebuilding confidence</option></select></label>
+    <label class="sel"><span>Price</span><select><option>Any price</option><option>Free</option></select></label>
+    <label class="sel"><span>Availability</span><select><option>Any time</option><option>This week</option><option>Next week</option></select></label>
+  </div>
+
+  <div class="results-head"><h2>All mentors</h2><span>Sort by: Recommended</span></div>
+
+  <div class="find-grid">
+    <div class="mlist" id="mlist"></div>
+    <aside class="preview" id="preview" aria-live="polite"></aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <a class="logo logo-lg" href="#top"><img src="images/logo.svg" alt="" width="40" height="40">Trellis</a>
+    <p>Mentorship for parents returning to work, woven together with parents who already made the leap.</p>
+  </div>
+
+</footer>
+
+<script src="app.js"></script>
+<script>
+  mountNav('find');
+  let current = new URLSearchParams(location.search).get('mentor') || 'maya';
+  const list = document.getElementById('mlist'), prev = document.getElementById('preview');
+
+  function render() {
+    list.innerHTML = MENTORS.map((m, n) => mentorCard(m, { best: n === 0, detail: true, selected: m.slug === current })).join('');
+    const m = mentorBySlug(current);
+    prev.innerHTML = `<img src="images/mentor-${m.slug}.svg" alt="${m.name}">
+      <h2>${m.name}</h2><p class="prev-role">${m.role} · ${m.co}</p>
+      <blockquote>${m.quote}</blockquote>
+      <a class="btn btn-primary btn-full" href="book.html?mentor=${m.slug}">Book a Conversation</a>
+      <a class="btn btn-line btn-full" href="book.html?mentor=${m.slug}">View Full Schedule</a>
+`;
+  }
+  function select(slug) { current = slug; render(); }
+  list.addEventListener('click', e => {
+    const view = e.target.closest('[data-view]');
+    if (view) { e.preventDefault(); select(view.dataset.view); return; }
+    const card = e.target.closest('.mcard');
+    if (card && !e.target.closest('a')) select(card.dataset.slug);
+  });
+  list.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('mcard')) { e.preventDefault(); select(e.target.dataset.slug); } });
+  render();
+</script>
+</body>
+</html>

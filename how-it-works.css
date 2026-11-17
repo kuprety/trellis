@@ -1,0 +1,34 @@
+/* How it works page. Builds on style.css (tokens, nav, .btn, .chip, .step, footer). */
+
+/* Active nav link */
+.nav-links a[aria-current="page"] { color: var(--green); }
+
+/* ---------- Page hero ---------- */
+.page-hero { max-width: var(--max); margin: 0 auto; padding: 48px var(--pad) 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.page-hero h1 { display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 500; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.02em; color: var(--green); }
+.page-hero h1 .serif { font-size: clamp(28px, 3.6vw, 52px); letter-spacing: -.02em; color: var(--text); }
+
+/* ---------- Illustration + step cards ---------- */
+.process { max-width: var(--max); margin: 96px auto 0; padding: 0 var(--pad); display: grid; grid-template-columns: 1.35fr 1fr; gap: 64px; align-items: center; }
+.process-art { width: 100%; height: auto; background: transparent; }
+.process-steps { display: flex; flex-direction: column; gap: 20px; }
+.process-steps .step { min-height: 0; padding: 32px 36px; }
+.process-steps .step h3 { margin: 24px 0 18px; }
+.process-steps .step p { max-width: none; }
+
+/* ---------- FAQ ---------- */
+.faq { max-width: var(--max); margin: 120px auto 0; padding: 0 var(--pad); display: flex; flex-direction: column; align-items: center; }
+.faq h2 { font-weight: 400; font-size: clamp(28px, 3.4vw, 44px); letter-spacing: -.01em; color: var(--text); margin-bottom: 56px; }
+.faq-list { width: 100%; margin-bottom: 56px; }
+.faq-item { padding: 28px 0; border-bottom: 1px solid #e6e3dc; }
+.faq-item:first-child { padding-top: 0; }
+.faq-item h3 { font-size: 20px; font-weight: 500; color: var(--green); margin-bottom: 10px; }
+.faq-item p { font-size: 18px; }
+
+/* ---------- Footer spacing (page ends with the button) ---------- */
+.faq + .footer, main + .footer { margin-top: 96px; }
+
+@media (max-width: 900px) {
+  .process { grid-template-columns: 1fr; gap: 40px; margin-top: 56px; }
+  .faq { margin-top: 80px; }
+}

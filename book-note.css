@@ -1,0 +1,37 @@
+/* Book a conversation, step 2. Builds on style.css + app.css + book.css. */
+.note-panel { padding: 0 8px; }
+.note-panel h2 { font-size: clamp(30px, 3.2vw, 42px); font-weight: 500; letter-spacing: -.02em; color: var(--green); }
+.note-sub { margin: 10px 0 22px; font-size: 18px; }
+.note-panel h3 { margin-top: 44px; font-size: 24px; font-weight: 500; color: var(--text-strong); }
+.note-panel h3 + .note-sub { margin-bottom: 18px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+#note { width: 100%; min-height: 150px; padding: 20px 24px; border: 2px solid var(--line); border-radius: 24px; background: #fff; font: inherit; font-size: 18px; line-height: 1.5; color: var(--text); resize: vertical; }
+#note:focus { outline: none; border-color: var(--green); }
+
+.drop { padding: 22px; border: 1.5px dashed #cfd3d6; border-radius: 24px; text-align: center; font-size: 18px; transition: background .15s, border-color .15s; }
+.drop.over { background: var(--mint); border-color: var(--green); }
+.drop .small { margin-top: 4px; font-size: 15px; }
+.pick { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--green); cursor: pointer; }
+.pick:hover { text-decoration: underline; }
+
+.mat-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 28px; margin-bottom: 14px; border: 2px solid var(--line); border-radius: 24px; background: #fff; }
+.mat-row[hidden], .drop[hidden], .link-form[hidden], .add-link[hidden], .err[hidden] { display: none; }
+.mat-name { font-size: 18px; font-weight: 500; color: var(--text-strong); }
+.mat-row .small { font-size: 15px; }
+.mat-actions { display: flex; align-items: center; gap: 20px; }
+.mat-actions a, .mat-actions button { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--green); cursor: pointer; }
+.mat-actions button { font-weight: 400; color: var(--muted); }
+.mat-actions a:hover, .mat-actions button:hover { text-decoration: underline; }
+.err { margin: 0 0 12px; color: #b3261e; font-size: 15px; }
+
+.add-link { margin-top: 10px; border: 0; background: none; padding: 0; font: inherit; font-size: 18px; font-weight: 600; color: var(--green); cursor: pointer; }
+.add-link:hover { text-decoration: underline; }
+.link-form { display: flex; gap: 12px; margin-top: 10px; }
+.link-form input { flex: 1; min-width: 0; padding: 14px 24px; border: 2px solid var(--line); border-radius: var(--radius-pill); background: #fff; font: inherit; font-size: 17px; }
+.link-form input:focus { outline: none; border-color: var(--green); }
+.link-form .btn { cursor: pointer; }
+
+.note-foot { display: flex; justify-content: flex-end; margin-top: 40px; }
+.note-foot .btn { padding: 18px 40px; font-size: 18px; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .drop { transition: none; } }

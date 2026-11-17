@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <title>Book a conversation · Trellis</title>
+  <link rel="stylesheet" href="book.css">
+</head>
+<body>
+<header class="book-top"><a class="logo" href="dashboard.html"><img src="images/logo.svg" alt="" width="24" height="24">Trellis</a></header>
+
+<main class="book">
+  <a class="back" href="find-mentor.html" id="back">‹ Back to mentor profile</a>
+  <h1>Book a conversation</h1>
+
+  <ol class="stepper" aria-label="Booking steps">
+    <li class="on" aria-current="step"><span>01</span><b>Choose a time</b></li>
+    <li><span>02</span><b>Add a note</b></li>
+    <li><span>03</span><b>Confirmation</b></li>
+  </ol>
+
+  <div class="book-grid">
+    <div class="book-side">
+      <section class="mentor-box" id="mentor-box"></section>
+      <section class="also" id="also"></section>
+    </div>
+
+    <section class="picker">
+      <h2>Choose a date &amp; time</h2>
+      <p class="tz">Time zone <button type="button" class="tz-btn">Eastern Time (US &amp; Canada) ▾</button></p>
+      <div class="picker-cols">
+        <div class="cal">
+          <div class="cal-head"><h3>November 2026</h3><span class="cal-nav"><button type="button" aria-label="Previous month" disabled>‹</button><button type="button" aria-label="Next month" disabled>›</button></span></div>
+          <div class="cal-grid" id="cal"></div>
+        </div>
+        <div class="times">
+          <h3 id="day-h"></h3>
+          <p class="small">30-minute sessions</p>
+          <div class="slots" id="slots"></div>
+        </div>
+      </div>
+      <div class="picker-foot">
+        <div><p class="sum" id="sum">Select a time to continue</p><p class="small" id="sum-sub">Eastern Time · Online video call</p></div>
+        <button class="btn btn-primary" id="go" type="button" disabled>Continue</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+  const slug = new URLSearchParams(location.search).get('mentor') || 'maya';
+  const m = mentorBySlug(slug);
+  document.getElementById('back').href = 'find-mentor.html?mentor=' + m.slug;
+  document.getElementById('mentor-box').innerHTML = `
+    <div class="mb-head"><img class="ring" src="images/mentor-${m.slug}.svg" alt=""><div><h3>${m.name}</h3><p>${m.role}</p><p class="small2">${m.co} · ${m.years} years’ experience</p></div></div>
+    <dl><div><dt>${ICON.history(24)}Duration</dt><dd>30 minutes</dd></div>
+    <div><dt>${ICON.cal(24)}Meeting</dt><dd>Video call</dd></div>
+    <div><dt>${ICON.check(24)}Fee</dt><dd class="free">Free</dd></div></dl>`;
+
+  // "You might also like": shuffle cycles through the other mentors
+  const others = MENTORS.filter(x => x.slug !== m.slug); let oi = 0;
+  function renderAlso() {
+    const o = others[oi];
+    document.getElementById('also').innerHTML = `<div class="also-head"><h3>You might also like</h3><button class="icon-btn" type="button" id="shuffle" aria-label="Show another mentor">${ICON.shuffle(26)}</button></div>
+      <div class="also-body"><img class="ring green" src="images/mentor-${o.slug}.svg" alt=""><div><h4>${o.first}</h4><p>${o.role}</p><p class="small2">${o.co} · ${o.years} years’ experience</p></div></div>
+      <a class="btn btn-line btn-full" href="book.html?mentor=${o.slug}">Switch mentor</a>`;
+    document.getElementById('shuffle').onclick = () => { oi = (oi + 1) % others.length; renderAlso(); };
+  }
+  renderAlso();
+
+  // Calendar for November 2026 (Nov 1 is a Sunday). Weekdays from the 9th onward are open.
+  const DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const SLOTS = [[10, 0], [11, 0], [13, 0], [14, 30]];
+  let day = 12, slot = null;
+  const fmt = (h, mi) => ({ t: ((h + 11) % 12 + 1) + ':' + String(mi).padStart(2, '0'), ap: h < 12 ? 'AM' : 'PM' });
+  const cal = document.getElementById('cal');
+  function renderCal() {
+    let html = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => '<span class="dow">' + d + '</span>').join('');
+    for (let c = 0; c < 35; c++) {
+      const d = c < 30 ? c + 1 : c - 29, inMonth = c < 30, wd = c % 7;
+      const open = inMonth && wd > 0 && wd < 6 && d >= 9;
+      html += open ? `<button type="button" class="day${d === day ? ' sel' : ''}" data-d="${d}" aria-pressed="${d === day}">${d}</button>` : `<span class="day off">${d}</span>`;
+    }
+    cal.innerHTML = html;
+  }
+  function renderTimes() {
+    const wd = new Date(2026, 10, day).getDay();
+    document.getElementById('day-h').textContent = DOW[wd] + ', ' + day + ' November';
+    document.getElementById('slots').innerHTML = SLOTS.map((s, n) => { const f = fmt(...s); return `<button type="button" class="slot${slot === n ? ' sel' : ''}" data-n="${n}">${f.t} ${f.ap}</button>`; }).join('');
+    const sum = document.getElementById('sum'), go = document.getElementById('go');
+    if (slot === null) { sum.textContent = 'Select a time to continue'; go.disabled = true; return; }
+    const [h, mi] = SLOTS[slot], s = fmt(h, mi), e = fmt(...(mi === 30 ? [h + 1, 0] : [h, 30]));
+    sum.textContent = DOW[wd].slice(0, 3) + ', ' + day + ' Nov · ' + s.t + '–' + e.t + ' ' + e.ap;
+    go.disabled = false;
+  }
+  cal.addEventListener('click', e => { const b = e.target.closest('.day[data-d]'); if (b) { day = +b.dataset.d; slot = null; renderCal(); renderTimes(); } });
+  document.getElementById('slots').addEventListener('click', e => { const b = e.target.closest('.slot'); if (b) { slot = +b.dataset.n; renderTimes(); } });
+  document.getElementById('go').addEventListener('click', () => {
+  if (slot === null) return;
+  store.set('booking', { mentor: m.slug, day, slot: SLOTS[slot] });
+  location.href = 'book-note.html';
+});
+
+  renderCal(); renderTimes();
+</script>
+</body>
+</html>

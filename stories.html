@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stories · Trellis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="stories.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="logo" href="index.html"><img src="images/logo.svg" alt="" width="24" height="24">Trellis</a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="how-it-works.html">How it works</a>
+    <a href="stories.html" aria-current="page">Stories</a>
+    <a href="resources.html">Resources</a>
+    <a href="faq.html" aria-current="page">FAQ</a>
+  </nav>
+  <div class="nav-actions">
+    <a href="signup.html">Log in</a>
+    <a class="btn btn-sm btn-primary" href="signup.html">Get started</a>
+  </div>
+</header>
+
+
+<main>
+  <section class="page-hero">
+    <span class="chip">Stories</span>
+    <h1>They've been there <span class="serif">Now they're here for you</span></h1>
+  </section>
+
+  <div class="filters" role="group" aria-label="Filter stories by field">
+    <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
+    <button class="filter" type="button" data-filter="tech" aria-pressed="false">Tech</button>
+    <button class="filter" type="button" data-filter="education" aria-pressed="false">Education</button>
+    <button class="filter" type="button" data-filter="finance" aria-pressed="false">Finance</button>
+    <button class="filter" type="button" data-filter="healthcare" aria-pressed="false">Healthcare</button>
+    <button class="filter" type="button" data-filter="marketing" aria-pressed="false">Marketing</button>
+  </div>
+
+  <section class="stories-grid" aria-label="Mentor stories">
+    <article class="story" data-field="tech">
+      <header class="story-head">
+        <img class="avatar ring-lavender" src="images/story-sofia.svg" alt="">
+        <div><h3>Sofia R.</h3><p>Senior Product Manager</p></div>
+      </header>
+      <blockquote>“Your gap is a chapter, not a hole.”</blockquote>
+      <div class="tags"><span class="tag tag-gap">6-year gap</span><span class="tag tag-field">Tech</span></div>
+    </article>
+
+    <article class="story" data-field="finance">
+      <header class="story-head">
+        <img class="avatar ring-green" src="images/story-elena.svg" alt="">
+        <div><h3>Elena G.</h3><p>Staff Accountant, CPA</p></div>
+      </header>
+      <blockquote>“I re-certified at 41. You can too.”</blockquote>
+      <div class="tags"><span class="tag tag-gap">8-year gap</span><span class="tag tag-field">Finance</span></div>
+    </article>
+
+    <article class="story" data-field="education">
+      <header class="story-head">
+        <img class="avatar ring-lavender" src="images/story-marcus.svg" alt="">
+        <div><h3>Marcus T.</h3><p>High School Principal</p></div>
+      </header>
+      <blockquote>“Stay-at-home dad to principal. Ask me how.”</blockquote>
+      <div class="tags"><span class="tag tag-gap">3-year gap</span><span class="tag tag-field">Education</span></div>
+    </article>
+
+    <article class="story" data-field="healthcare">
+      <header class="story-head">
+        <img class="avatar ring-lavender" src="images/story-naya.svg" alt="">
+        <div><h3>Naya K.</h3><p>Registered Nurse</p></div>
+      </header>
+      <blockquote>“Returnships are real and work; let's find yours.”</blockquote>
+      <div class="tags"><span class="tag tag-gap">4-year gap</span><span class="tag tag-field">Healthcare</span></div>
+    </article>
+
+    <article class="story" data-field="marketing">
+      <header class="story-head">
+        <img class="avatar ring-green" src="images/story-tiffany.svg" alt="">
+        <div><h3>Tiffany L.</h3><p>Marketing Director</p></div>
+      </header>
+      <blockquote>“I want to help parents feel sure of themselves.”</blockquote>
+      <div class="tags"><span class="tag tag-gap">5-year gap</span><span class="tag tag-field">Marketing</span></div>
+    </article>
+
+    <article class="story" data-field="tech">
+      <header class="story-head">
+        <img class="avatar ring-lavender" src="images/story-priya.svg" alt="">
+        <div><h3>Priya M.</h3><p>Software Engineer</p></div>
+      </header>
+      <blockquote>“I went from bootcamp, part-time, then full-time.”</blockquote>
+      <div class="tags"><span class="tag tag-gap">3-year gap</span><span class="tag tag-field">Tech</span></div>
+    </article>
+  </section>
+
+  <div class="stories-cta">
+    <a class="btn btn-primary btn-wide" href="#start-match">Start my match</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <a class="logo logo-lg" href="index.html"><img src="images/logo.svg" alt="" width="40" height="40">Trellis</a>
+    <p>Mentorship for parents returning to work, woven together with parents who already made the leap.</p>
+  </div>
+  <nav class="footer-col" aria-label="Explore">
+    <h4>Explore</h4>
+    <a href="how-it-works.html">How it works</a>
+    <a href="stories.html">Stories</a>
+    <a href="#resources">Resources</a>
+    <a href="#faq">FAQs</a>
+  </nav>
+  <nav class="footer-col" aria-label="Get involved">
+    <h4>Get involved</h4>
+    <a href="signup.html">Find a mentor</a>
+    <a href="signup.html">Become a mentor</a>
+    <a href="mailto:kriuprety@gmail.com">Contact us</a>
+  </nav>
+</footer>
+
+<script>
+  // Filter chips: show only stories whose data-field matches
+  const filters = document.querySelectorAll('.filter');
+  const stories = document.querySelectorAll('.story');
+  filters.forEach(btn => btn.addEventListener('click', () => {
+    const f = btn.dataset.filter;
+    filters.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+    stories.forEach(s => { s.hidden = f !== 'all' && s.dataset.field !== f; });
+  }));
+</script>
+</body>
+</html>

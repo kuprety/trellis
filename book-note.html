@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add a note · Trellis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="book.css">
+  <link rel="stylesheet" href="book-note.css">
+</head>
+<body>
+<header class="book-top"><a class="logo" href="dashboard.html"><img src="images/logo.svg" alt="" width="24" height="24">Trellis</a></header>
+
+<main class="book">
+  <a class="back" id="back" href="book.html">‹ Back to choose a time</a>
+  <h1>Book a conversation</h1>
+
+  <ol class="stepper" aria-label="Booking steps">
+    <li class="done"><span>Completed</span><b><i class="ico"></i>Choose a time</b></li>
+    <li class="on" aria-current="step"><span>02</span><b>Add a note</b></li>
+    <li><span>03</span><b>Confirmation</b></li>
+  </ol>
+
+  <div class="book-grid">
+    <div class="book-side">
+      <section class="mentor-box" id="mentor-box"></section>
+      <section class="chosen" id="chosen"></section>
+    </div>
+
+    <section class="note-panel">
+      <h2 id="note-h"></h2>
+      <p class="note-sub" id="note-sub"></p>
+      <label class="sr" for="note">Note</label>
+      <textarea id="note" rows="5" placeholder="What would you like to talk about?"></textarea>
+
+      <h3>Share materials</h3>
+      <p class="note-sub">Select what you’d like to share from your profile.</p>
+
+      <div class="drop" id="drop">
+        <p><button type="button" class="pick" id="pick">Choose a file</button> or drag it here</p>
+        <p class="small">CV or supporting document · PDF</p>
+        <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+      </div>
+      <div class="mat-row" id="file-row" hidden>
+        <div><p class="mat-name" id="file-name"></p><p class="small">PDF · Added today</p></div>
+        <span class="mat-actions"><a id="file-preview" target="_blank" rel="noopener">Preview</a><button type="button" id="file-remove">Remove</button></span>
+      </div>
+      <div class="mat-row" id="link-row" hidden>
+        <div><p class="mat-name">My portfolio</p><p class="small">Website · Saved to your profile</p></div>
+        <span class="mat-actions"><a id="link-view" target="_blank" rel="noopener">View</a><button type="button" id="link-remove">Remove</button></span>
+      </div>
+      <p class="err" id="err" role="alert" hidden></p>
+
+      <button type="button" class="add-link" id="add-link">+ Add a portfolio or profile link</button>
+      <form class="link-form" id="link-form" hidden>
+        <input type="text" id="link-in" placeholder="https://yourportfolio.com" aria-label="Portfolio or profile link">
+        <button class="btn btn-primary btn-sm" type="submit">Add</button>
+      </form>
+
+      <div class="note-foot"><button class="btn btn-primary" id="confirm" type="button" onclick="window.location.href='book-confirmed.html'">Confirm booking</button></div>
+    </section>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const bk = currentBooking(), m = mentorBySlug(bk.mentor), info = bookingInfo(bk);
+  document.querySelectorAll('.ico').forEach(e => e.innerHTML = ICON.checkFilled(26));
+  $('back').href = 'book.html?mentor=' + m.slug;
+  $('mentor-box').innerHTML = mentorBoxHTML(m);
+  $('chosen').innerHTML = `<p class="small">Your selected time</p><h3>${info.long}</h3><p>${info.range}</p><p class="tzline">Eastern Time (US &amp; Canada)</p><a href="book.html?mentor=${m.slug}">Change time</a>`;
+  $('note-h').textContent = 'Add a note for ' + m.first;
+  $('note-sub').textContent = `A few words will help ${m.first} prepare. Everything below is optional.`;
+
+  // Materials (prototype: files stay in the browser, nothing is uploaded)
+  let file = null, link = null;
+  const err = t => { $('err').textContent = t; $('err').hidden = !t; };
+  function setFile(f) {
+    if (!f) return;
+    if (f.type !== 'application/pdf' && !/\.pdf$/i.test(f.name)) { err('Please choose a PDF file.'); return; }
+    err(''); file = { name: f.name };
+    $('file-name').textContent = f.name; $('file-preview').href = URL.createObjectURL(f);
+    $('file-row').hidden = false; $('drop').hidden = true;
+  }
+  $('pick').onclick = () => $('file').click();
+  $('file').onchange = e => setFile(e.target.files[0]);
+  ['dragenter', 'dragover'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
+  $('drop').addEventListener('drop', e => setFile(e.dataTransfer.files[0]));
+  $('file-remove').onclick = () => { file = null; $('file').value = ''; $('file-row').hidden = true; $('drop').hidden = false; };
+
+  $('add-link').onclick = () => { $('link-form').hidden = false; $('add-link').hidden = true; $('link-in').focus(); };
+  $('link-form').onsubmit = e => {
+    e.preventDefault();
+    let v = $('link-in').value.trim(); if (!v) return;
+    if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+    try { new URL(v); } catch (x) { err('Enter a valid link, like https://yourportfolio.com'); return; }
+    err(''); link = v; $('link-view').href = v; $('link-row').hidden = false; $('link-form').hidden = true; $('link-in').value = '';
+  };
+  $('link-remove').onclick = () => { link = null; $('link-row').hidden = true; $('add-link').hidden = false; };
+
+  // Everything on this step is optional, so Confirm is always available
+  $('confirm').onclick = () => {
+    store.set('booking', { ...bk, note: $('note').value.trim(), file: file && file.name, link, confirmed: true });
+    location.href = 'book-confirmed.html';
+  };
+</script>
+</body>
+</html>
